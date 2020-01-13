@@ -158,7 +158,7 @@ class TMDBClient {
     }
     
     class func getWatchlist(completion: @escaping ([Movie], Error?) -> Void) {
-        taskForGetType(url: Endpoints.getWatchlist.url, responseType: MovieResults.self) { response, error in
+        taskForGetRequest(url: Endpoints.getWatchlist.url, responseType: MovieResults.self) { response, error in
             if let response = response, error == nil {
                 completion(response.results, nil)
             } else {
@@ -189,7 +189,7 @@ class TMDBClient {
         requestTokenGetTask.resume()
     }
     
-    class func taskForGetType<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+    class func taskForGetRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, error == nil else {
                 DispatchQueue.main.async {
