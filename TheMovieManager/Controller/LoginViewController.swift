@@ -38,7 +38,18 @@ class LoginViewController: UIViewController {
     
     func handleLoginResponse(success: Bool, error: Error?) {
         print(TMDBClient.Auth.requestToken)
-        TMDBClient.getSessionId(completion: handleSessionRequest(success:error:))
+        if success {
+            TMDBClient.getSessionId(completion: handleSessionRequest(success:error:))
+        } else {
+            passwordTextField.text = ""
+            let alertController = UIAlertController(title: "Error Logging in", message: error?.localizedDescription, preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "OK", style: .default) { action in
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            alertController.addAction(alertAction)
+            present(alertController, animated: true, completion: nil)
+        }
     }
     
     func handleSessionRequest(success: Bool, error: Error?) {
