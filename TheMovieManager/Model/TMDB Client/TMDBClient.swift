@@ -88,33 +88,15 @@ class TMDBClient {
     }
     
     class func getSessionId(completion: @escaping (Bool, Error?) -> Void) {
-        var request = URLRequest(url: Endpoints.createSessionId.url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let postSession = PostSession(requestToken: Auth.requestToken)
-        let encoder = JSONEncoder()
-        let json = try! encoder.encode(postSession)
-        request.httpBody = json
-        
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            let urlResponse = response as? HTTPURLResponse
-            print("Response code \(String(describing: urlResponse?.statusCode))")
-            guard let data = data else {
+        taskForPostRequest(url: Endpoints.createSessionId.url, body: postSession, responseType: SessionResponse.self) { (response, error) in
+            guard let response = response, error == nil else {
                 completion(false, error)
                 return
             }
-            
-            let decoder = JSONDecoder()
-            do{
-                let responseObject = try decoder.decode(SessionResponse.self, from: data)
-                Auth.sessionId = responseObject.sessionId
-                completion(true, nil)
-            } catch {
-                completion(false, error)
-            }
+            Auth.sessionId = response.sessionId
+            completion(true, nil)
         }
-        
-        task.resume()
     }
     
     class func getWatchlist(completion: @escaping ([Movie], Error?) -> Void) {
