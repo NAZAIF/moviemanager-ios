@@ -2,10 +2,14 @@
 //  MarkFavorite.swift
 //  TheMovieManager
 //
-//  Created by Owen LaRosa on 8/13/18.
-//  Copyright © 2018 Udacity. All rights reserved.
+//  Created by Moideen Nazaif VM on 09/07/19.
+//  Copyright © 2019 Moideen Nazaif VM. All rights reserved.
 //
+
 
 import Foundation
 
+struct MarkFavorite: Encodable {
+    
+}
 
